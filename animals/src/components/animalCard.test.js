@@ -6,7 +6,7 @@ let animal = {
     name: 'Lion',
     sound: 'RAWR!',
     classification: {
-        speies: 'Panthera leo'
+        species: 'Panthera leo'
     }
 }
 
