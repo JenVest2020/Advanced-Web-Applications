@@ -12,7 +12,7 @@ const AddAnimal = (props) => {
 
     return(
         <div>
-        <form onSubmit={}>
+        {/* <form onSubmit={}>
             <label htmlFor="name">Name</label>
             <input onChange={}
                     type="text"
@@ -37,7 +37,7 @@ const AddAnimal = (props) => {
                     required>
             </input>
             <button>Submit</button>
-        </form>
+        </form> */}
         </div>
     )
 
