@@ -18,10 +18,11 @@ export default function Login(props) {
     const handleSubmit = (e) => {
         e.preventDefault();
         axios.post('http://localhost:5000/api/login', login)
-        .then(res => {
-            console.log('from submit successful: res', res);
-            localStorage.setItem('token', res.data.payload)
-        })
+            .then(res => {
+                console.log('from submit successful: res', res);
+                localStorage.setItem('token', res.data.payload)
+            })
+        props.history.push('/creatures')
     }
 
     return (

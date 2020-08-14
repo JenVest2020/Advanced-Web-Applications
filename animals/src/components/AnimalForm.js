@@ -1,14 +1,15 @@
 import React, { useState } from "react";
+import { axiosWithAuth } from "../utils/axiosWithAuth";
 
 const initialAnimal = {
     name: '',
     sound: '',
-    classification: { species:'' }
+    classification: { species: '' }
 }
 
-export default function AnimalForm({animals, updateAnimals }) {
+export default function AnimalForm({ animals, updateAnimals, setDependency }) {
 
-    const [ updating, setUpdating ] = useState(false);
+    const [updating, setUpdating] = useState(false);
     const [animalToUpdate, setAnimalToUpdate] = useState(initialAnimal);
 
     const editAnimal = animal => {
@@ -21,10 +22,23 @@ export default function AnimalForm({animals, updateAnimals }) {
         // How can we update the animal information?
         // Where can we get the ID? 
         // Where is the information stored?
+        axiosWithAuth()
+            .put(`animals/${animalToUpdate.id}`, animalToUpdate)
+            .then(res => {
+                console.log('from AF: update successful: res', res.data)
+                setDependency(true)
+            })
+            .catch(err => console.error('from AF: update failed: err', err.message))
     }
 
     const deleteAnimal = animal => {
         // How can we delete an animal?
+        axiosWithAuth()
+            .delete(`animals/${animalToUpdate.id}`, animal)
+            .then(res => {
+                console.log('from AF: delete successful: res', res.data)
+                updateAnimals(animals.filter((item) => item.id !== animalToUpdate.id))
+            })
     }
 
     return (
@@ -34,9 +48,9 @@ export default function AnimalForm({animals, updateAnimals }) {
                     <li key={animal.name} onClick={() => editAnimal(animal)} className="edit-animals">
                         <span>
                             <span onClick={e => {
-                                    e.stopPropagation();
-                                    deleteAnimal(animal)
-                                }
+                                e.stopPropagation();
+                                deleteAnimal(animal)
+                            }
                             } >
                                 X
                             </span>{" "}
@@ -45,12 +59,12 @@ export default function AnimalForm({animals, updateAnimals }) {
                     </li>
                 ))}
             </ul>
-            { updating && (
+            {updating && (
                 <form onSubmit={saveUpdate}>
                     <legend>Update Animal</legend>
                     <label>
                         Name:
-                        <input 
+                        <input
                             onChange={e =>
                                 setAnimalToUpdate({ ...animalToUpdate, name: e.target.value })
                             }
@@ -59,7 +73,7 @@ export default function AnimalForm({animals, updateAnimals }) {
                     </label>
                     <label>
                         Sound:
-                        <input 
+                        <input
                             onChange={e =>
                                 setAnimalToUpdate({ ...animalToUpdate, sound: e.target.value })
                             }
@@ -68,10 +82,10 @@ export default function AnimalForm({animals, updateAnimals }) {
                     </label>
                     <label>
                         Classification:
-                        <input 
+                        <input
                             onChange={e =>
-                                setAnimalToUpdate({ 
-                                    ...animalToUpdate, 
+                                setAnimalToUpdate({
+                                    ...animalToUpdate,
                                     classification: { species: e.target.value }
                                 })
                             }
